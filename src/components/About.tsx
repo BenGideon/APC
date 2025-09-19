@@ -110,12 +110,12 @@ export default function About() {
               alt="Modern veterinary clinic interior"
               className="rounded-2xl shadow-lg"
             />
-            {/* <div className="absolute -bottom-6 -right-6 bg-primary-50 rounded-xl shadow-lg p-4 border border-secondary-200"> */}
+            <div className="absolute -bottom-6 -right-6 bg-primary-50 rounded-xl shadow-lg p-4 border border-secondary-200">
               <div className="flex items-center space-x-2">
                 <CheckCircle className="text-secondary-600" size={20} />
                 <span className="font-semibold text-accent-900">AAHA Accredited</span>
               </div>
-            {/* </div> */}
+            </div>
           </div>
         </div>
 

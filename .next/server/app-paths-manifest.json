@@ -1,10 +1,6 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/services/page": "app/services/page.js",
-  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js",
-  "/wellness/page": "app/wellness/page.js",
-  "/dental/page": "app/dental/page.js",
-  "/privacy/page": "app/privacy/page.js",
-  "/surgical/page": "app/surgical/page.js",
-  "/page": "app/page.js"
+  "/api/contact/route": "app/api/contact/route.js",
+  "/page": "app/page.js",
+  "/contact/page": "app/contact/page.js",
+  "/manifest.webmanifest/route": "app/manifest.webmanifest/route.js"
 }

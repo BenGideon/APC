@@ -1,10 +1,60 @@
+'use client'
+
 import Navigation from '@/components/Navigation'
 import Footer from '@/components/Footer'
 import AnimatedSection from '@/components/AnimatedSection'
-import { MapPin, Phone, Mail, Clock, Send } from 'lucide-react'
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from 'lucide-react'
 import { useState } from 'react'
 
 export default function Contact() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    reason: '',
+    petType: ''
+  })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [isSubmitted, setIsSubmitted] = useState(false)
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsSubmitting(true)
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+
+      if (response.ok) {
+        setIsSubmitted(true)
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          reason: '',
+          petType: ''
+        })
+      } else {
+        alert('There was an error submitting your form. Please try again.')
+      }
+    } catch (error) {
+      alert('There was an error submitting your form. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
   return (
     <main className="min-h-screen">
       <Navigation />
@@ -98,97 +148,138 @@ export default function Contact() {
                 {/* Contact Form */}
                 <div className="bg-gray-50 p-8 rounded-lg">
                   <h3 className="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h3>
-                  <form className="space-y-6">
-                    <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                        Name/Nombre *
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="Your full name"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
-                        Contact Number/Numero De Telefono *
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="(832) 123-4567"
-                      />
-                    </div>
-                    
-                    <div>
-                      <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2">
-                        Reason For Visit/Razon De La Visita *
-                      </label>
-                      <textarea
-                        id="reason"
-                        name="reason"
-                        rows={4}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-                        placeholder="Please describe the reason for your visit or any questions you have..."
-                      />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-3">
-                        Multiple Choice *
-                      </label>
-                      <div className="space-y-2">
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name="petType"
-                            value="dog"
-                            className="mr-3 text-primary-600"
-                          />
-                          <span className="text-gray-700">Dog/Canine/Perro</span>
-                        </label>
-                        <label className="flex items-center">
-                          <input
-                            type="radio"
-                            name="petType"
-                            value="cat"
-                            className="mr-3 text-primary-600"
-                          />
-                          <span className="text-gray-700">Cat/Feline/Gato</span>
-                        </label>
+                  
+                  {isSubmitted ? (
+                    <div className="text-center py-8">
+                      <div className="flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mx-auto mb-4">
+                        <CheckCircle className="w-8 h-8 text-green-600" />
                       </div>
+                      <h4 className="text-xl font-bold text-gray-900 mb-2">Message Sent Successfully!</h4>
+                      <p className="text-gray-600 mb-4">
+                        Thank you for contacting us. We'll get back to you within 24-48 hours.
+                      </p>
+                      <button
+                        onClick={() => setIsSubmitted(false)}
+                        className="text-primary-600 hover:text-primary-700 font-medium"
+                      >
+                        Send Another Message
+                      </button>
                     </div>
-                    
-                    <button
-                      type="submit"
-                      className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors flex items-center justify-center"
-                    >
-                      <Send className="w-5 h-5 mr-2" />
-                      Send Message
-                    </button>
-                  </form>
+                  ) : (
+                    <form onSubmit={handleSubmit} className="space-y-6">
+                      <div>
+                        <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                          Name/Nombre *
+                        </label>
+                        <input
+                          type="text"
+                          id="name"
+                          name="name"
+                          required
+                          value={formData.name}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          placeholder="Your full name"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                          Email *
+                        </label>
+                        <input
+                          type="email"
+                          id="email"
+                          name="email"
+                          required
+                          value={formData.email}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          placeholder="your.email@example.com"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-2">
+                          Contact Number/Numero De Telefono *
+                        </label>
+                        <input
+                          type="tel"
+                          id="phone"
+                          name="phone"
+                          required
+                          value={formData.phone}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          placeholder="(832) 123-4567"
+                        />
+                      </div>
+                      
+                      <div>
+                        <label htmlFor="reason" className="block text-sm font-medium text-gray-700 mb-2">
+                          Reason For Visit/Razon De La Visita *
+                        </label>
+                        <textarea
+                          id="reason"
+                          name="reason"
+                          rows={4}
+                          required
+                          value={formData.reason}
+                          onChange={handleChange}
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                          placeholder="Please describe the reason for your visit or any questions you have..."
+                        />
+                      </div>
+                      
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-3">
+                          Multiple Choice *
+                        </label>
+                        <div className="space-y-2">
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name="petType"
+                              value="dog"
+                              checked={formData.petType === 'dog'}
+                              onChange={handleChange}
+                              className="mr-3 text-primary-600"
+                            />
+                            <span className="text-gray-700">Dog/Canine/Perro</span>
+                          </label>
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name="petType"
+                              value="cat"
+                              checked={formData.petType === 'cat'}
+                              onChange={handleChange}
+                              className="mr-3 text-primary-600"
+                            />
+                            <span className="text-gray-700">Cat/Feline/Gato</span>
+                          </label>
+                        </div>
+                      </div>
+                      
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="w-full bg-primary-600 text-white py-3 px-6 rounded-lg hover:bg-primary-700 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isSubmitting ? (
+                          <>
+                            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                            Sending...
+                          </>
+                        ) : (
+                          <>
+                            <Send className="w-5 h-5 mr-2" />
+                            Send Message
+                          </>
+                        )}
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
             </div>
