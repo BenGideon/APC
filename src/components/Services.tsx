@@ -39,10 +39,33 @@ export default function Services() {
               ))}
             </div>
             
-            <div className="text-center">
+            <div className="text-center space-y-4">
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link
+                  href="/wellness"
+                  className="inline-flex items-center bg-primary-600 hover:bg-primary-700 text-primary-50 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                >
+                  Wellness & Medical
+                  <ArrowRight size={16} className="ml-2" />
+                </Link>
+                <Link
+                  href="/dental"
+                  className="inline-flex items-center bg-secondary-600 hover:bg-secondary-700 text-primary-50 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                >
+                  Dental Special $135
+                  <ArrowRight size={16} className="ml-2" />
+                </Link>
+                <Link
+                  href="/surgical"
+                  className="inline-flex items-center bg-accent-600 hover:bg-accent-700 text-primary-50 font-medium py-3 px-6 rounded-lg transition-colors duration-200"
+                >
+                  Surgical Services
+                  <ArrowRight size={16} className="ml-2" />
+                </Link>
+              </div>
               <Link
                 href="/services"
-                className="inline-flex items-center bg-primary-600 hover:bg-primary-700 text-primary-50 font-medium py-3 px-8 rounded-lg transition-colors duration-200"
+                className="inline-flex items-center bg-primary-100 hover:bg-primary-200 text-primary-600 font-medium py-3 px-8 rounded-lg transition-colors duration-200 border-2 border-primary-200"
               >
                 View All Services & Pricing
                 <ArrowRight size={16} className="ml-2" />
