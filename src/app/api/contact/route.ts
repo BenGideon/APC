@@ -50,52 +50,6 @@ export async function POST(request: NextRequest) {
 
       console.log('Contact form submitted:', contactData)
 
-      // Trigger WhatsApp message
-      try {
-        const twilio = require('twilio')
-        const accountSid = process.env.TWILIO_ACCOUNT_SID
-        const authToken = process.env.TWILIO_AUTH_TOKEN
-        const whatsappNumber = process.env.TWILIO_WHATSAPP_NUMBER || 'whatsapp:+14155238886'
-        
-        if (accountSid && authToken) {
-          const client = twilio(accountSid, authToken)
-          
-          // Format phone number for WhatsApp
-          const toWhatsapp = phone.startsWith('+') ? `whatsapp:${phone}` : `whatsapp:+1${phone}`
-          
-          // Create message content
-          const messageBody = `🐾 *Amigos Pet Clinic* 🐾
-
-Hello ${name}! 
-
-Thank you for contacting us about your ${petType}. We've received your inquiry and our team will get back to you within 24-48 hours.
-
-📍 *Location:* 4215 Spencer Hwy, Pasadena, TX 77504
-📞 *Phone:* (832) 991-8811
-
-*Business Hours:*
-Mon-Fri: 8:00AM - 5:00PM
-Saturday: 8:00AM - 3:00PM
-Sunday: Closed
-
-For emergencies, please contact VCA Animal Emergency Hospital Southeast.
-
-We look forward to caring for your pet! 🐕🐱`
-          
-          // Send WhatsApp message
-          const message = await client.messages.create({
-            body: messageBody,
-            from: whatsappNumber,
-            to: toWhatsapp
-          })
-          
-          console.log(`WhatsApp message sent to ${phone}, SID: ${message.sid}`)
-        } else {
-          console.log('Twilio credentials not configured')
-        }
-      } catch (error: unknown) {
-        console.error('WhatsApp integration error:', (error as Error).message)
-      }
       
       return NextResponse.json({ success: true })
     } catch (fileError) {
