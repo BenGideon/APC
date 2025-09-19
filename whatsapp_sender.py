@@ -9,14 +9,19 @@ import os
 from twilio.rest import Client
 from datetime import datetime
 
-# Twilio Configuration (update with your credentials)
-TWILIO_ACCOUNT_SID = "AC596f77da2ecc713ffd3aed34b07c98db"  # Get from Twilio Console
-TWILIO_AUTH_TOKEN = "c6375cc62e48b02d6ffe28e2dc9b0b8f"    # Get from Twilio Console
-TWILIO_WHATSAPP_NUMBER = "whatsapp:+14155238886"  # Twilio Sandbox number
+# Twilio Configuration (from environment variables)
+TWILIO_ACCOUNT_SID = os.getenv("TWILIO_ACCOUNT_SID")
+TWILIO_AUTH_TOKEN = os.getenv("TWILIO_AUTH_TOKEN")
+TWILIO_WHATSAPP_NUMBER = os.getenv("TWILIO_WHATSAPP_NUMBER", "whatsapp:+14155238886")
 
 def send_whatsapp_message(to_number, name, pet_type):
     """Send WhatsApp message to the contact"""
     try:
+        # Check if credentials are available
+        if not TWILIO_ACCOUNT_SID or not TWILIO_AUTH_TOKEN:
+            print("❌ Twilio credentials not found in environment variables")
+            return False
+            
         # Initialize Twilio client
         client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
         
